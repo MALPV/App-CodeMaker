@@ -1,5 +1,7 @@
 package cl.inventionchile.codemaker.ui.screens.home
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,8 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -17,17 +17,45 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import cl.inventionchile.codemaker.R
 import cl.inventionchile.codemaker.ui.components.MyButton
+import kotlinx.coroutines.delay
 
-@Preview
 @Composable
-fun LoginScreen() {
+fun HomeScreen(
+    vm: HomeVM = hiltViewModel(),
+    onBack: () -> Unit
+) {
+
+    var copyPressed by rememberSaveable { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (copyPressed) 2f else 1f,
+        label = "scale"
+    )
+
+    LaunchedEffect(copyPressed) {
+        if (copyPressed){
+            delay(500)
+            copyPressed = false
+        }
+    }
+
+    BackHandler { }
+
     Scaffold {
         Column(
             modifier = Modifier
@@ -37,7 +65,7 @@ fun LoginScreen() {
         ) {
             Row {
                 Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { }) {
+                IconButton(onClick = onBack) {
                     Icon(
                         modifier = Modifier.size(24.dp),
                         painter = painterResource(id = R.drawable.ic_logout),
@@ -66,30 +94,27 @@ fun LoginScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
-                val items = List(8) { it.toString() }
-                val progress = 0.5f
+                Text(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                            transformOrigin = TransformOrigin.Center
+                        },
+                    text = vm.code.value,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    letterSpacing = 8.sp,
+                    style = MaterialTheme.typography.headlineLarge
+                )
 
-                Row {
-                    items.forEach { item ->
-                        Card(
-                            modifier = Modifier.padding(4.dp),
-                            shape = RoundedCornerShape(100.dp)
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 6.dp),
-                                text = item,
-                                style = MaterialTheme.typography.headlineSmall
-                            )
-                        }
-                    }
-                }
-
-                LinearProgressIndicator(progress = { progress })
+                LinearProgressIndicator(
+                    progress = { vm.progress.floatValue },
+                    color = Color.Green
+                )
 
                 TextButton(
                     shape = MaterialTheme.shapes.medium,
-                    onClick = {}
+                    onClick = { copyPressed = true }
                 ) {
                     Text(
                         text = "Toca para copiar",
@@ -105,10 +130,7 @@ fun LoginScreen() {
                 text = "Generar nueva clave",
                 painter = painterResource(id = R.drawable.ic_new_code),
                 enabled = true,
-                onClick = {
-                    //focusManager.clearFocus()
-                    //vm.login(onNext = { navigator.push(EventTypesListScreen()) })
-                }
+                onClick = { vm.refreshCode() }
             )
         }
     }
