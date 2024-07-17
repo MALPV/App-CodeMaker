@@ -20,8 +20,8 @@ constructor(
     private val getUserUseCase: GetUserUseCase
 ): ViewModel() {
 
-    val username = mutableStateOf("test@test.cl")
-    val password = mutableStateOf("v2c47mk7jd#BB")
+    val username = mutableStateOf("")
+    val password = mutableStateOf("")
     val remember = mutableStateOf(false)
 
     val isLoading = mutableStateOf(false)
