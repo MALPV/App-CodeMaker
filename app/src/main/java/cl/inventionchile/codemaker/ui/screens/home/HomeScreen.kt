@@ -27,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cl.inventionchile.codemaker.R
+import cl.inventionchile.codemaker.data.core.copyToClipboard
 import cl.inventionchile.codemaker.ui.components.MyButton
 import kotlinx.coroutines.delay
 
@@ -41,6 +43,7 @@ fun HomeScreen(
     onBack: () -> Unit
 ) {
 
+    val context = LocalContext.current
     var copyPressed by rememberSaveable { mutableStateOf(false) }
     val scale by animateFloatAsState(
         targetValue = if (copyPressed) 2f else 1f,
@@ -114,7 +117,10 @@ fun HomeScreen(
 
                 TextButton(
                     shape = MaterialTheme.shapes.medium,
-                    onClick = { copyPressed = true }
+                    onClick = {
+                        copyPressed = true
+                        context.copyToClipboard(vm.code.value)
+                    }
                 ) {
                     Text(
                         text = "Toca para copiar",
