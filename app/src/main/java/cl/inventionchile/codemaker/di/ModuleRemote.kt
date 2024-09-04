@@ -23,7 +23,10 @@ object ModuleRemote {
     @Provides
     fun providerHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor()
-            .setLevel(HttpLoggingInterceptor.Level.BODY)
+            .setLevel(
+                if(BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                else HttpLoggingInterceptor.Level.NONE
+            )
     }
 
     @Singleton
