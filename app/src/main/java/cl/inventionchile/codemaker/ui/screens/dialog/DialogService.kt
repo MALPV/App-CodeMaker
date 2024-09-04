@@ -49,7 +49,9 @@ fun DialogService(
         )
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Column {
@@ -145,8 +147,6 @@ fun DialogService(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             Row {
                 Spacer(modifier = Modifier.weight(1f))
                 MyButton(
@@ -159,6 +159,8 @@ fun DialogService(
                     }
                 )
             }
+
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
