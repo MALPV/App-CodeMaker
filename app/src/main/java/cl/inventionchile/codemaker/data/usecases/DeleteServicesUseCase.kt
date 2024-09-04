@@ -1,22 +1,18 @@
 package cl.inventionchile.codemaker.data.usecases
 
 import cl.inventionchile.codemaker.data.local.AppDatabase
-import cl.inventionchile.codemaker.data.local.entity.EttUser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class GetUserUseCase(
+class DeleteServicesUseCase(
     private val appDatabase: AppDatabase,
     private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun get() = withContext(ioDispatcher){
-        appDatabase.daoUser().get()
+    suspend fun invoke(
+        id: Long
+    ) = withContext(ioDispatcher){
+        appDatabase.daoServices().delete(id)
     }
-
-    suspend fun observe() = withContext(ioDispatcher){
-        appDatabase.daoUser().observe()
-    }
-
 
 }

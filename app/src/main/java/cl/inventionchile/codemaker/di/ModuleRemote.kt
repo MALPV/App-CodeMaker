@@ -1,5 +1,6 @@
 package cl.inventionchile.codemaker.di
 
+import cl.inventionchile.codemaker.BuildConfig
 import cl.inventionchile.codemaker.data.remote.AppServices
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -44,13 +45,12 @@ object ModuleRemote {
             .create()
     }
 
-
     @Singleton
     @Provides
     fun providerAppServices(okHttpClient: OkHttpClient, gson: Gson): AppServices {
         return Retrofit
             .Builder()
-            .baseUrl(AppServices.URL_BASE)
+            .baseUrl(BuildConfig.API_URL) // Valor genérico
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()

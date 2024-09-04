@@ -5,14 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
@@ -25,6 +20,7 @@ import cl.inventionchile.codemaker.R
 import cl.inventionchile.codemaker.ui.components.MyAnimationLottie
 import cl.inventionchile.codemaker.ui.screens.home.HomeScreen
 import cl.inventionchile.codemaker.ui.screens.login.LoginScreen
+import cl.inventionchile.codemaker.ui.screens.services.ServicesScreen
 import cl.inventionchile.codemaker.ui.theme.CodeMakerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,6 +61,7 @@ class MainActivity : ComponentActivity() {
                                 route = Destinations.LOGIN
                             ){
                                 LoginScreen(
+                                    onServices = { navController.navigate(Destinations.SERVICES) },
                                     onHome = { navController.navigate(Destinations.HOME) }
                                 )
                             }
@@ -75,6 +72,17 @@ class MainActivity : ComponentActivity() {
                                     onBack = {
                                         navController.navigate(Destinations.LOGIN) {
                                             popUpTo(Destinations.HOME) { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
+                            composable(
+                                route = Destinations.SERVICES
+                            ){
+                                ServicesScreen(
+                                    onBack = {
+                                        navController.navigate(Destinations.LOGIN) {
+                                            popUpTo(Destinations.SERVICES) { inclusive = true }
                                         }
                                     }
                                 )

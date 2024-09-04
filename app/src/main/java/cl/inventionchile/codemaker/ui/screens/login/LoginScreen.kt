@@ -3,6 +3,8 @@ package cl.inventionchile.codemaker.ui.screens.login
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import cl.inventionchile.codemaker.ui.components.MyTextField
 @Composable
 fun LoginScreen(
     vm: LoginVM = hiltViewModel(),
+    onServices: () -> Unit,
     onHome: () -> Unit
 ){
 
@@ -46,6 +51,20 @@ fun LoginScreen(
                 modifier = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                Row {
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(onClick = onServices) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = Icons.Rounded.Settings,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
                 Column {
                     Text(
                         text = "Iniciar sesión",
@@ -58,7 +77,6 @@ fun LoginScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-
                 Column {
                     MyTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -88,11 +106,13 @@ fun LoginScreen(
                         onValueChange = { value -> vm.password.value = value }
                     )
                 }
+
                 MyCheckBox(
                     label = "Recordar usuario",
                     isChecked = vm.remember.value,
                     onCheckedChange = { value -> vm.remember.value = value }
                 )
+
                 MyButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Iniciar sesión",
@@ -102,6 +122,8 @@ fun LoginScreen(
                         vm.authenticate(onHome)
                     }
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
 

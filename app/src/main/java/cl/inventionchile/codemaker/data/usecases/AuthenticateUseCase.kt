@@ -25,12 +25,32 @@ class AuthenticateUseCase(
         remember: Boolean
     ) = flow {
 
+        val serviceSelected = appDatabase.daoServices().getBySelected(selected = true)
+
+        if (serviceSelected == null) {
+            emit(ResultState.Error("Selecciona una API en la configuración"))
+            return@flow
+        }
+
+        if (username.isEmpty()) {
+            emit(ResultState.Error("Ingresa un usuario"))
+            return@flow
+        }
+
+        if (password.isEmpty()) {
+            emit(ResultState.Error("Ingresa la contraseña"))
+            return@flow
+        }
+
         emit(ResultState.Loading)
 
         try {
 
             val loginRequest = LoginRequest(username, password)
-            val response = appServices.authenticate(loginRequest)
+            val response = appServices.authenticate(
+                url = serviceSelected.getUrlWebServices(),
+                request = loginRequest
+            )
 
             if (response.status == "ok"){
 

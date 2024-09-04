@@ -28,7 +28,7 @@ fun MyLoading(){
                     .padding(16.dp)
                     .size(64.dp),
                 color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.onBackground
+                trackColor = MaterialTheme.colorScheme.primary
             )
         }
     }

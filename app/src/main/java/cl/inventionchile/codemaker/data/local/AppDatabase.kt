@@ -18,7 +18,7 @@ import cl.inventionchile.codemaker.data.local.entity.EttUser
 abstract class AppDatabase: RoomDatabase() {
 
     companion object {
-        const val VERSION = 7
+        const val VERSION = 12
         const val NAME = "code-maker.db"
     }
 
